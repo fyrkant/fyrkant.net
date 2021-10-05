@@ -12,7 +12,6 @@ const Container = styled("div", {
 });
 
 const Home = ({ titles, data }) => {
-  console.log(data);
   return (
     <Container>
       <Head>

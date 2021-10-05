@@ -1,3 +1,3 @@
 module.exports = {
-  // empty
+  target: "serverless",
 };
