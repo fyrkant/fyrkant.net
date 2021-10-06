@@ -32,10 +32,7 @@ const getElementTypeFromAnnotationType = (annotationType: AnnotationTypes) => {
   }
 };
 
-export const notionApiTextToJsx = (
-  text: Text,
-  key: string
-): React.ReactNode => {
+export const notionApiTextToJsx = (text: Text, key = ""): React.ReactNode => {
   const { content, link, annotations } = text;
   const as = [];
 

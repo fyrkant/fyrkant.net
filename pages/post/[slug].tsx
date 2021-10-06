@@ -1,5 +1,4 @@
 import { Client } from "@notionhq/client";
-import { slugify } from "src/utils";
 import React from "react";
 import { notionApiTextToJsx } from "src/notionApiTextToJsx";
 import Link from "next/link";
@@ -59,14 +58,14 @@ export const getStaticPaths = async () => {
 
   const paths = [];
 
-  const titles = data.results.map((x) => {
-    return (x.properties.Name as any).title[0].plain_text;
+  const slugs = data.results.map((x) => {
+    return (x.properties.Slug as any).url;
   });
 
-  titles.forEach((title) => {
+  slugs.forEach((slug) => {
     paths.push({
       params: {
-        slug: slugify(title),
+        slug,
       },
     });
   });
@@ -88,9 +87,8 @@ export const getStaticProps = async ({ params: { slug } }) => {
   });
 
   const page = data.results.find((result) => {
-    const title = (result.properties.Name as any).title[0].plain_text;
-    const resultSlug = slugify(title);
-    return resultSlug === slug;
+    const rSlug = (result.properties.Slug as any).url;
+    return rSlug === slug;
   });
 
   const blocks = await notion.blocks.children.list({

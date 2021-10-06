@@ -4,14 +4,14 @@ import Head from "next/head";
 import Nav from "../components/Nav";
 import { styled } from "$s";
 import { Client } from "@notionhq/client";
-import { slugify } from "src/utils";
 
 const Container = styled("div", {
   maxWidth: 1440,
   padding: 16,
 });
 
-const Home = ({ titles, data }) => {
+const Home = ({ titlesAndSlugs, data }) => {
+  console.log(data);
   return (
     <Container>
       <Head>
@@ -20,9 +20,9 @@ const Home = ({ titles, data }) => {
 
       <Nav />
       <ul>
-        {titles.map((title) => (
+        {titlesAndSlugs.map(({ title, slug }) => (
           <li key={title}>
-            <Link href={`/post/${slugify(title)}`}>
+            <Link href={`/post/${slug}`}>
               <a>{title}</a>
             </Link>
           </li>
@@ -46,12 +46,15 @@ export const getStaticProps = async () => {
     },
   });
 
-  const titles = data.results.map((x) => {
-    return (x.properties.Name as any).title[0].plain_text;
+  const titlesAndSlugs = data.results.map((x) => {
+    const title = (x.properties.Name as any).title[0].plain_text;
+    const slug = (x.properties.Slug as any).url;
+
+    return { title, slug };
   });
 
   return {
-    props: { titles, data },
+    props: { titlesAndSlugs, data },
     revalidate: 10,
   };
 };
